@@ -3,7 +3,12 @@ import {View,
   Text,
   StyleSheet} from 'react-native';
 
+var eventbriteAPI =  require('./api/EventbriteAPI')
+
 module.exports = React.createClass({
+  componentDidMount() {
+    eventbriteAPI.searchEvents('hackathon');
+  },
   render() {
     return(
       <View style={styles.container}>

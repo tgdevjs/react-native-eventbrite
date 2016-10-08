@@ -12,10 +12,6 @@ import {
   View
 } from 'react-native';
 import Main from './src/main';
-var config =  require('./config/config');
-
-console.log('config ',config);
-console.log('config: ',config.EVENTBRITE_URL)
 
 class RNEventbrite extends Component {
   render() {
