@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   ListView,
+  Image,
   } from 'react-native';
 import Geocoder from 'react-native-geocoder';
 
@@ -55,17 +56,31 @@ module.exports = React.createClass({
     });
   },
   componentDidMount() {
-    eventbriteAPI.searchEvents('hackathon', 'San Francisco');
+    eventbriteAPI.searchEvents('hackathon', 'San Francisco', (responseJSON) =>{
+      this.setState({dataSource: ds.cloneWithRows(responseJSON.events)});
+    });
+  },
+  renderText(text) {
+    return text.length > 30 ? `${text.substring(0,30)}...` : text;
   },
   renderRow(rowData) {
+    const defaultImg = 'https://pixabay.com/static/uploads/photo/2014/08/21/19/43/question-423604__180.png';
+    let img = rowData.logo != null ? rowData.logo.url : defaultImg;
+
     return (
-      <View>
-        <Text>
-          {rowData.name.text}
-        </Text>
-        <Text>
-          {rowData.url}
-        </Text>
+      <View style={styles.row}>
+        <Image
+          style={styles.rowLogo}
+          source={{uri: img}}
+        />
+        <View style={styles.rowDetails}>
+          <Text>
+            {this.renderText(rowData.name.text)}
+          </Text>
+          <Text>
+            more details
+          </Text>
+        </View>
       </View>
     )
   },
@@ -88,14 +103,29 @@ module.exports = React.createClass({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   title: {
     flex: 1,
     marginTop: 40,
   },
   list: {
+    flex: 8,
+  },
+  row: {
     flex: 1,
-  }
+    flexDirection: 'row',
+    padding: 5,
+  },
+  rowLogo: {
+    flex: 1,
+    width: 60,
+    height: 60,
+    borderWidth: 1,
+    borderColor: '#000',
+  },
+  rowDetails: {
+    flex: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
