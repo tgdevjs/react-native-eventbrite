@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import {Navigator} from 'react-native';
 
 import Events from './components/events';
+import EventDetail from './components/eventDetail';
 
 const routes = {
-  events: Events
+  events: Events,
+  eventDetail: EventDetail,
 }
 
 
@@ -22,6 +24,7 @@ module.exports = React.createClass({
     return (
       <Component
         navigator={navigator}
+        {...route}
       />
     )
   },

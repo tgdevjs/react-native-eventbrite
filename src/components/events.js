@@ -71,6 +71,15 @@ module.exports = React.createClass({
   renderText(text) {
     return text.length > 30 ? `${text.substring(0,30)}...` : text;
   },
+  pushDetail(rowData) {
+    this.props.navigator.push({
+      name: 'eventDetail',
+      title: rowData.name.text,
+      description: rowData.description.text,
+      url: rowData.url,
+      img: rowData.logo.url,
+    });
+  },
   renderRow(rowData) {
     const defaultImg = 'https://pixabay.com/static/uploads/photo/2014/08/21/19/43/question-423604__180.png';
     let img = rowData.logo != null ? rowData.logo.url : defaultImg;
@@ -85,9 +94,13 @@ module.exports = React.createClass({
           <Text>
             {this.renderText(rowData.name.text)}
           </Text>
-          <Text>
-            more details
-          </Text>
+          <TouchableOpacity
+            onPress={() => this.pushDetail(rowData)}
+          >
+            <Text style={styles.link}>
+              more details
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     )
@@ -183,4 +196,7 @@ const styles = StyleSheet.create({
     color: '#00F',
     padding: 15,
   },
+  link: {
+    color: '#00F',
+  }
 });
