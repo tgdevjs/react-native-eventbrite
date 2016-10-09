@@ -2,12 +2,13 @@ import React, {Comonent} from 'react';
 import {View,
   Text,
   StyleSheet} from 'react-native';
+import Geocoder from 'react-native-geocoder';
 
 var eventbriteAPI =  require('./api/EventbriteAPI')
 
 module.exports = React.createClass({
   componentDidMount() {
-    eventbriteAPI.searchEvents('hackathon');
+    eventbriteAPI.searchEvents('hackathon', 'San Francisco');
   },
   render() {
     return(
