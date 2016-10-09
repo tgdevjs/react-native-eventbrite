@@ -1,185 +1,28 @@
-import React, {Comonent} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ListView,
-  Image,
-  TextInput,
-  TouchableOpacity,
-  } from 'react-native';
-import Geocoder from 'react-native-geocoder';
+import React, {Component} from 'react';
+import {Navigator} from 'react-native';
 
-const eventbriteAPI =  require('./api/EventbriteAPI')
-const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1!==r2});
+import Events from './components/events';
+
+const routes = {
+  events: Events
+}
 
 
 module.exports = React.createClass({
-  getInitialState() {
-    return ({
-      eventType: '',
-      city: '',
-      dataSource: ds.cloneWithRows([
-        {
-          name: {
-            text: 'Event 1'
-          },
-          url: 'www.eventone.com'
-        },
-        {
-          name: {
-            text: 'Event 1'
-          },
-          url: 'www.eventone.com'
-        },
-        {
-          name: {
-            text: 'Event 1'
-          },
-          url: 'www.eventone.com'
-        },
-        {
-          name: {
-            text: 'Event 1'
-          },
-          url: 'www.eventone.com'
-        },
-        {
-          name: {
-            text: 'Event 1'
-          },
-          url: 'www.eventone.com'
-        },
-        {
-          name: {
-            text: 'Event 1'
-          },
-          url: 'www.eventone.com'
-        },
-      ]),
-    });
-  },
-  componentDidMount() {
-    this.searchEvents('hackathon','San Francisco');
-  },
-  searchEvents(eventType, city) {
-    eventbriteAPI.searchEvents(eventType, city, (responseJSON) =>{
-      this.setState({dataSource: ds.cloneWithRows(responseJSON.events)});
-    });
-  },
-  renderText(text) {
-    return text.length > 30 ? `${text.substring(0,30)}...` : text;
-  },
-  renderRow(rowData) {
-    const defaultImg = 'https://pixabay.com/static/uploads/photo/2014/08/21/19/43/question-423604__180.png';
-    let img = rowData.logo != null ? rowData.logo.url : defaultImg;
-
-    return (
-      <View style={styles.row}>
-        <Image
-          style={styles.rowLogo}
-          source={{uri: img}}
-        />
-        <View style={styles.rowDetails}>
-          <Text>
-            {this.renderText(rowData.name.text)}
-          </Text>
-          <Text>
-            more details
-          </Text>
-        </View>
-      </View>
-    )
-  },
   render() {
     return(
-      <View style={styles.container}>
-        <Text style={styles.title}>
-          React Native Eventbrite
-        </Text>
-        <View style={styles.form}>
-          <TextInput
-            style={styles.input}
-            placeholder='kind of event...'
-            onChangeText={(text) => this.setState({eventType: text})}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder='city...'
-            onChangeText={(text) => this.setState({city: text})}
-          />
-          <TouchableOpacity
-            style={styles.submitButton}
-            onPress={() => this.searchEvents(this.state.eventType,this.state.city)}
-          >
-            <Text style={styles.submitButtonText}>
-              Search
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <ListView
-          style={styles.list}
-          dataSource={this.state.dataSource}
-          renderRow={(rowData) => this.renderRow(rowData)}
-        />
-      </View>
-    );
-  }
-});
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+      <Navigator
+        initialRoute={{name: 'events'}}
+        renderScene={this.renderScene}
+      />
+    )
   },
-  title: {
-    flex: 1,
-    marginTop: 40,
-    textAlign: 'center',
-    fontSize: 20,
-  },
-  form: {
-    flex: 4
-  },
-  list: {
-    flex: 8,
-  },
-  row: {
-    flex: 1,
-    flexDirection: 'row',
-    padding: 5,
-  },
-  rowLogo: {
-    flex: 1,
-    width: 60,
-    height: 60,
-    borderWidth: 1,
-    borderColor: '#000',
-  },
-  rowDetails: {
-    flex: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  input: {
-    flex: 1,
-    borderColor: '#000',
-    borderRadius: 5,
-    borderWidth: 1,
-    margin: 5,
-    textAlign: 'center',
-  },
-  submitButton: {
-    flex: 1,
-    margin: 5,
-  },
-  submitButtonText: {
-    flex: 1,
-    flexDirection: 'row',
-    borderColor: '#00F',
-    borderRadius: 5,
-    borderWidth: 1,
-    textAlign: 'center',
-    color: '#00F',
-    padding: 15,
+  renderScene(route, navigator) {
+    let Component = routes[route.name];
+    return (
+      <Component
+        navigator={navigator}
+      />
+    )
   },
 });
