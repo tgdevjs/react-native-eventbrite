@@ -5,6 +5,8 @@ import {
   StyleSheet,
   ListView,
   Image,
+  TextInput,
+  TouchableOpacity,
   } from 'react-native';
 import Geocoder from 'react-native-geocoder';
 
@@ -15,6 +17,8 @@ const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1!==r2});
 module.exports = React.createClass({
   getInitialState() {
     return ({
+      eventType: '',
+      city: '',
       dataSource: ds.cloneWithRows([
         {
           name: {
@@ -56,7 +60,10 @@ module.exports = React.createClass({
     });
   },
   componentDidMount() {
-    eventbriteAPI.searchEvents('hackathon', 'San Francisco', (responseJSON) =>{
+    this.searchEvents('hackathon','San Francisco');
+  },
+  searchEvents(eventType, city) {
+    eventbriteAPI.searchEvents(eventType, city, (responseJSON) =>{
       this.setState({dataSource: ds.cloneWithRows(responseJSON.events)});
     });
   },
@@ -88,8 +95,28 @@ module.exports = React.createClass({
     return(
       <View style={styles.container}>
         <Text style={styles.title}>
-          Main
+          React Native Eventbrite
         </Text>
+        <View style={styles.form}>
+          <TextInput
+            style={styles.input}
+            placeholder='kind of event...'
+            onChangeText={(text) => this.setState({eventType: text})}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder='city...'
+            onChangeText={(text) => this.setState({city: text})}
+          />
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={() => this.searchEvents(this.state.eventType,this.state.city)}
+          >
+            <Text style={styles.submitButtonText}>
+              Search
+            </Text>
+          </TouchableOpacity>
+        </View>
         <ListView
           style={styles.list}
           dataSource={this.state.dataSource}
@@ -107,6 +134,11 @@ const styles = StyleSheet.create({
   title: {
     flex: 1,
     marginTop: 40,
+    textAlign: 'center',
+    fontSize: 20,
+  },
+  form: {
+    flex: 4
   },
   list: {
     flex: 8,
@@ -127,5 +159,27 @@ const styles = StyleSheet.create({
     flex: 5,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  input: {
+    flex: 1,
+    borderColor: '#000',
+    borderRadius: 5,
+    borderWidth: 1,
+    margin: 5,
+    textAlign: 'center',
+  },
+  submitButton: {
+    flex: 1,
+    margin: 5,
+  },
+  submitButtonText: {
+    flex: 1,
+    flexDirection: 'row',
+    borderColor: '#00F',
+    borderRadius: 5,
+    borderWidth: 1,
+    textAlign: 'center',
+    color: '#00F',
+    padding: 15,
   },
 });
