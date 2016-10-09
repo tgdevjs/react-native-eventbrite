@@ -6,9 +6,19 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Linking,
 } from 'react-native';
 
 module.exports = React.createClass({
+  openUrl(url) {
+    Linking.canOpenURL(url).then(supported => {
+      if(supported) {
+        Linking.openURL(url);
+      }else {
+        console.log(`Can't open: ${url}`);
+      }
+    })
+  },
   render() {
     const {title, url, img, description} = this.props
     return (
@@ -19,7 +29,9 @@ module.exports = React.createClass({
           >
             <Text style={styles.link}>Back</Text>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.openUrl(this.props.url)}
+          >
             <Text style={styles.link}>FullDetails</Text>
           </TouchableOpacity>
         </View>

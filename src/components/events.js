@@ -20,48 +20,11 @@ module.exports = React.createClass({
     return ({
       eventType: '',
       city: '',
-      dataSource: ds.cloneWithRows([
-        {
-          name: {
-            text: 'Event 1'
-          },
-          url: 'www.eventone.com'
-        },
-        {
-          name: {
-            text: 'Event 1'
-          },
-          url: 'www.eventone.com'
-        },
-        {
-          name: {
-            text: 'Event 1'
-          },
-          url: 'www.eventone.com'
-        },
-        {
-          name: {
-            text: 'Event 1'
-          },
-          url: 'www.eventone.com'
-        },
-        {
-          name: {
-            text: 'Event 1'
-          },
-          url: 'www.eventone.com'
-        },
-        {
-          name: {
-            text: 'Event 1'
-          },
-          url: 'www.eventone.com'
-        },
-      ]),
+      dataSource: ds.cloneWithRows([]),
     });
   },
   componentDidMount() {
-    this.searchEvents('hackathon','San Francisco');
+    // this.searchEvents('hackathon','San Francisco');
   },
   searchEvents(eventType, city) {
     eventbriteAPI.searchEvents(eventType, city, (responseJSON) =>{
